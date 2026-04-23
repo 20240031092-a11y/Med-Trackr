@@ -1,0 +1,183 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Medication App',
+      theme: ThemeData.dark(),
+      home: HomePage(),
+    );
+  }
+}
+
+// ================= HOME =================
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF061A2B),
+      appBar: AppBar(
+        title: Text('MEDICATION ADMINISTRATION RECORD'),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+      ),
+      body: Center(
+        child: Wrap(
+          spacing: 20,
+          runSpacing: 20,
+          children: [
+            menuButton(context, "PATIENT PROFILE", Colors.blue, PatientPage()),
+            menuButton(context, "MEDICATION LIST", Colors.purple, MedListPage()),
+            menuButton(context, "MEDICATION RECORD", Colors.red, RecordPage()),
+            menuButton(context, "DASHBOARD", Colors.cyan, DashboardPage()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget menuButton(context, text, color, page) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => page),
+        );
+      },
+      child: Text(text),
+    );
+  }
+}
+
+// ================= PATIENT PROFILE =================
+class PatientPage extends StatefulWidget {
+  @override
+  _PatientPageState createState() => _PatientPageState();
+}
+
+class _PatientPageState extends State<PatientPage> {
+  final name = TextEditingController();
+  final age = TextEditingController();
+  final address = TextEditingController();
+  final allergies = TextEditingController();
+
+  String output = "";
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Patient Profile")),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(controller: name, decoration: InputDecoration(labelText: "Name")),
+            TextField(controller: age, decoration: InputDecoration(labelText: "Age")),
+            TextField(controller: address, decoration: InputDecoration(labelText: "Address")),
+            TextField(controller: allergies, decoration: InputDecoration(labelText: "Allergies")),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  output =
+                      "Name: ${name.text}\nAge: ${age.text}\nAddress: ${address.text}\nAllergies: ${allergies.text}";
+                });
+              },
+              child: Text("Save"),
+            ),
+            SizedBox(height: 20),
+            Text(output)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ================= MEDICATION LIST =================
+class MedListPage extends StatefulWidget {
+  @override
+  _MedListPageState createState() => _MedListPageState();
+}
+
+class _MedListPageState extends State<MedListPage> {
+  List meds = [];
+
+  final medName = TextEditingController();
+  final dose = TextEditingController();
+  final freq = TextEditingController();
+  final route = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Medication List")),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(controller: medName, decoration: InputDecoration(labelText: "Medication Name")),
+            TextField(controller: dose, decoration: InputDecoration(labelText: "Dose")),
+            TextField(controller: freq, decoration: InputDecoration(labelText: "Frequency")),
+            TextField(controller: route, decoration: InputDecoration(labelText: "Route")),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  meds.add(
+                      "${medName.text} | ${dose.text} | ${freq.text} | ${route.text}");
+                });
+              },
+              child: Text("Add Medication"),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: meds.length,
+                itemBuilder: (_, i) => Card(
+                  child: ListTile(title: Text(meds[i])),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ================= RECORD =================
+class RecordPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Medication Record")),
+      body: Center(
+        child: Text("You can expand this later"),
+      ),
+    );
+  }
+}
+
+// ================= DASHBOARD =================
+class DashboardPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Dashboard")),
+      body: Center(
+        child: Text("Dashboard coming soon"),
+      ),
+    );
+  }
+}
